@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../bootstrap/js/popper.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.js"></script>
+    <script src="../bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(function(){
+                $("#menu").load("../navbar/navbar.html");
+            });
+        });
+    </script>
+    <title>Document</title>
+</head>
+<body>
+    <div id='menu'></div>
+    <h1>Cadastrar Venda</h1>
+    <form action="addVenda.php" method="POST">
+        <input type="date" name="data" placeholder="Data" required><br>
+        <select name="Disco">
+            <option value="">Selecione um disco</option>
+            <?php
+                require_once '../init.php';
+                $PDO = db_connect();
+                $sql = 'SELECT * FROM disco';
+                $stmt = $PDO->prepare($sql);
+                $stmt->execute();
+                $artistas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($discos as $disco) {
+                    echo "<option value='{$disco['idDisco']}'>{$disco['nome_disco']}</option>";
+                }
+            ?>
+        </select>
+        <select name="Cliente">
+            <option value="">Selecione um cliente</option>
+            <?php
+                require_once '../init.php';
+                $PDO = db_connect();
+                $sql = 'SELECT * FROM venda';
+                $stmt = $PDO->prepare($sql);
+                $stmt->execute();
+                $artistas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($clientes as $cliente) {
+                    echo "<option value='{$cliente['idCliente']}'>{$cliente['nome']}</option>";
+                }
+            ?>
+        </select>
+        <input type="submit" value="Cadastrar">
+    </form>
+</body>
+</html>
