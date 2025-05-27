@@ -45,7 +45,8 @@
                 $stmt->execute();
                 $artistas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 foreach ($artistas as $artista) {
-                    echo "<option value='{$artista['idArtista']}'>{$artista['nome_artista']}</option>";
+                    $selected = ($artista['idArtista'] == $disco['idArtista']) ? 'selected' : '';
+                    echo "<option value='{$artista['idArtista']}' $selected>{$artista['nome_artista']}</option>";
                 }
             ?>
         </select>

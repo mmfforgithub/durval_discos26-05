@@ -1,7 +1,11 @@
 <?php
 require_once '../init.php';
 $PDO = db_connect();
-$stmt = $PDO->query('SELECT * FROM venda');
+
+// Consulta com JOIN para mostrar cliente e disco
+$sql = "SELECT v.idVenda, v.data_de_venda, c.nome AS cliente, d.nome_disco AS disco FROM venda v JOIN cliente c ON v.idCliente = c.idCliente JOIN disco d ON v.idDisco = d.idDisco ORDER BY v.data_de_venda DESC";
+
+$stmt = $PDO->query($sql);
 ?>
 
 <!DOCTYPE html>
@@ -14,23 +18,33 @@ $stmt = $PDO->query('SELECT * FROM venda');
     <script src="../bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            $(function(){
-                $("#menu").load("../navbar/navbar.html");
-            });
+            $("#menu").load("../navbar/navbar.html");
         });
     </script>
-    <title>Document</title>
+    <title>Vendas</title>
 </head>
 <body>
-<div id='menu'></div>
-   <?php 
-        echo '<h1>Vendas</h1><a href="formAddVenda.php">Novo</a><table>';
-        foreach ($stmt as $row) {
-            echo '<tr><td>'.$row['data_de_venda'].'</td><td><a href="formEditVenda.php?id='.$row['idVenda'].'">Editar</a> <a href="deleteVenda.php?id='.$row['idVenda'].'">Excluir</a></td></tr>';
-        }
-        echo '</table>';
-    ?>
+    <div id="menu"></div>
+    <h1>Vendas</h1>
+    <a href="formAddVenda.php">Nova Venda</a>
+    <table border="1">
+        <tr>
+            <th>Data</th>
+            <th>Cliente</th>
+            <th>Disco</th>
+            <th>Ações</th>
+        </tr>
+        <?php foreach ($stmt as $row) { ?>
+            <tr>
+                <td><?php echo $row['data_de_venda']; ?></td>
+                <td><?php echo $row['cliente']; ?></td>
+                <td><?php echo $row['disco']; ?></td>
+                <td>
+                    <a href="formEditVenda.php?id=<?php echo $row['idVenda']; ?>">Editar</a> |
+                    <a href="deleteVenda.php?id=<?php echo $row['idVenda']; ?>">Excluir</a>
+                </td>
+            </tr>
+        <?php } ?>
+    </table>
 </body>
 </html>
-
-  

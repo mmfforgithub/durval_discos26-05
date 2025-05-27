@@ -1,16 +1,3 @@
-<?php
-    require_once '../init.php';
-    $id = $_GET['id'];
-    $PDO = db_connect();
-    $stmt = $PDO->prepare('SELECT * FROM venda WHERE idVenda = :id');
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    $stmt->execute();
-    $venda = $stmt->fetch(PDO::FETCH_ASSOC);
-    if(!is_array($venda)){
-        header("Location: exibirVenda.php");
-    }
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,10 +17,9 @@
 </head>
 <body>
     <div id='menu'></div>
-    <h1>Editar Vendas</h1>
-    <form action="editVenda.php" method="POST">
-        <input type="hidden" name="id" value="<?php echo $venda['idVenda'] ?>">
-        <input type="date" name="data" placeholder="Data" value="<?php echo $venda['data_de_venda'] ?>" required><br>
+    <h1>Cadastrar Venda</h1>
+    <form action="addVenda.php" method="POST">
+        <input type="date" name="data" placeholder="Data" required><br>
         <select name="disco">
             <option value="">Selecione um disco</option>
             <?php
@@ -44,8 +30,7 @@
                 $stmt->execute();
                 $discos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 foreach ($discos as $disco) {
-                    $selected = ($disco['idDisco'] == $venda['idDisco']) ? 'selected' : '';
-                    echo "<option value='{$disco['idDisco']}' $selected>{$disco['nome_disco']}</option>";
+                    echo "<option value='{$disco['idDisco']}'>{$disco['nome_disco']}</option>";
                 }
             ?>
         </select>
@@ -59,12 +44,11 @@
                 $stmt->execute();
                 $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 foreach ($clientes as $cliente) {
-                    $selected = ($cliente['idCliente'] == $venda['idCliente']) ? 'selected' : '';
-                    echo "<option value='{$cliente['idCliente']}' $selected>{$cliente['nome']}</option>";
+                    echo "<option value='{$cliente['idCliente']}'>{$cliente['nome']}</option>";
                 }
             ?>
         </select>
-        <input type="submit" value="Atualizar">
+        <input type="submit" value="Cadastrar">
     </form>
 </body>
 </html>
